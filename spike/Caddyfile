@@ -1,0 +1,24 @@
+# In-container config: plain HTTP, the edge proxy handles TLS.
+{
+	auto_https off
+	admin off
+}
+
+:80 {
+	root * /srv
+	encode zstd gzip
+	file_server
+
+	# Explicit, in case the base image's MIME table ever drops it;
+	# ammo.js falls back to slower ArrayBuffer instantiation without it.
+	@wasm path *.wasm
+	header @wasm Content-Type application/wasm
+
+	# Bundled Python modules are fetched as text; never execute or download them.
+	@py path *.py
+	header @py Content-Type "text/plain; charset=utf-8"
+
+	# Assets are cache-busted with ?v=<hash> (updateVersion.py); HTML must revalidate.
+	@html path / *.html
+	header @html Cache-Control "no-cache"
+}

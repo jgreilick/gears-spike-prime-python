@@ -1,0 +1,93 @@
+{
+  "name": "vexVRRobot",
+  "shortDescription": "VEXcode VR Standard Robot (approximation)",
+  "longDescription": "Two-wheel drivetrain with gyro, electromagnet, pen, two front bumpers, front laser distance sensor, front and down eyes, and a location sensor.",
+  "longerDescription": "<h3>Dimensions</h3><ul><li>Wheel Diameter: 5 cm</li><li>Wheel Spacing: 12 cm</li><li>Length: 13.3 cm</li></ul><h3>Actuators</h3><ul><li>Port A : Left Wheel</li><li>Port B : Right Wheel</li><li>Port C : Electromagnet</li></ul><h3>Sensors</h3><ul><li>Port 1 : Gyro (drivetrain)</li><li>Port 2 : GPS (location)</li><li>Port 3 : Touch (left bumper)</li><li>Port 4 : Touch (right bumper)</li><li>Port 5 : Laser Range (distance)</li><li>Port 6 : Color (front eye)</li><li>Port 7 : Color (down eye)</li><li>Port 8 : Pen</li></ul>",
+  "thumbnail": "",
+
+  "bodyHeight": 4,
+  "bodyWidth": 10,
+  "bodyLength": 13.3,
+
+  "wheels": true,
+  "wheelDiameter": 5,
+  "wheelWidth": 1.6,
+  "wheelToBodyOffset": 0.2,
+
+  "bodyEdgeToWheelCenterY": 1,
+  "bodyEdgeToWheelCenterZ": 5.65,
+
+  "bodyMass": 1000,
+  "wheelMass": 200,
+  "casterMass": 0,
+  "caster": true,
+  "casterDiameter": 0,
+  "casterOffsetZ": 0,
+
+  "wheelFriction": 10,
+  "bodyFriction": 0,
+  "casterFriction": 0,
+
+  "wheelMaxAcceleration": 20,
+  "wheelStopActionHoldForce": 30000,
+  "wheelTireDownwardsForce": -4000,
+
+  "color": "#D0D0D0",
+  "imageType": "all",
+  "imageURL": "",
+
+  "components": [
+    {
+      "type": "GyroSensor",
+      "position": [0, 2.5, -3],
+      "options": null
+    },
+    {
+      "type": "GPSSensor",
+      "position": [0, 2.5, 1],
+      "options": null
+    },
+    {
+      "type": "TouchSensor",
+      "position": [-3.5, -0.5, 7.65],
+      "rotation": [-1.5707963267948966, 0, 0],
+      "options": { "width": 3, "depth": 2 }
+    },
+    {
+      "type": "TouchSensor",
+      "position": [3.5, -0.5, 7.65],
+      "rotation": [-1.5707963267948966, 0, 0],
+      "options": { "width": 3, "depth": 2 }
+    },
+    {
+      "type": "LaserRangeSensor",
+      "position": [0, 1, 7.4],
+      "rotation": [-1.5707963267948966, 0, 0],
+      "options": { "rayLength": 300 }
+    },
+    {
+      "type": "ColorSensor",
+      "position": [0, 3, 5.65],
+      "rotation": [0, 0, 0],
+      "options": { "sensorMaxRange": 30, "sensorFov": 0.524 }
+    },
+    {
+      "type": "ColorSensor",
+      "position": [0, -1, 4.5],
+      "rotation": [1.5707963267948966, 0, 0],
+      "options": null
+    },
+    {
+      "type": "Pen",
+      "position": [0, -0.9, 1],
+      "rotation": [0, 0, 0],
+      "options": { "doubleSided": false, "traceVisibleToSensors": false }
+    },
+    {
+      "type": "MagnetActuator",
+      "position": [0, -1.25, 7.65],
+      "rotation": [0, 0, 0],
+      "options": null
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "worldName": "custom",
+  "options": {
+    "imageURL": "textures/maps/custom.png",
+    "groundType": "box",
+    "uScale": 1,
+    "vScale": 1,
+    "imageScale": 1,
+    "timer": "none",
+    "wall": true,
+    "wallHeight": 10,
+    "wallThickness": 4.5,
+    "wallColor": "#1A1A1A",
+    "startPos": "center",
+    "startPosXYZStr": "",
+    "startRotStr": "",
+    "objects": [
+      {
+        "type": "box",
+        "position": [0, 40, 5],
+        "size": [40, 4, 10],
+        "color": "#E60000",
+        "physicsOptions": "fixed"
+      },
+      {
+        "type": "box",
+        "position": [0, 20, 0.05],
+        "size": [20, 6, 0.1],
+        "color": "#00C000",
+        "physicsOptions": "false"
+      },
+      {
+        "type": "cylinder",
+        "position": [-30, 0, 0.5],
+        "size": [1, 4, 0],
+        "color": "#3060E0",
+        "physicsOptions": "moveable",
+        "magnetic": true
+      }
+    ]
+  }
+}

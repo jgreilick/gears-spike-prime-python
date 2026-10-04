@@ -251,7 +251,7 @@ A configurator JSON with no source changes. Load it with Robot → Load from fil
    - The GPS sits over the axle (the turning centre). Measured: 0.5 cm drift after a 360° spin.
    - One wheel revolution drives 15.7–16.0 cm (expected 15.71).
    - A closed-loop 90° right turn reads +89 to +90°.
-4. **Wheel-option workaround applied:** `wheelMaxAcceleration: 20`, `wheelStopActionHoldForce: 30000`, `wheelTireDownwardsForce: -4000`.
+4. **Wheel-option workaround applied:** `wheelMaxAcceleration: 20` (lowered to 2 in §12), `wheelStopActionHoldForce: 30000`, `wheelTireDownwardsForce: -4000`.
    - This **confirms §6 risk 4 at runtime.** Without these keys the wheel gets `maxAcceleration = undefined`, `stopActionHoldForce = undefined` and a tire downforce of **0**.
    - Ramping is disabled. Commanded speed reads 800 on the first 20 ms sample, versus 350 → 718 → 800 with the fix.
    - Flat-ground driving still passes either way. I did not measure how much HOLD resistance is lost.
@@ -414,7 +414,7 @@ Load it with World → Load from file, and load `spike/vr-robot.json` as the rob
 |---|---|
 | `spike/vex.py` | V5 Python subset over `simPython`. Prints `vex shim v0.1`. `__all__` keeps internals and `SimNotAvailable` out of `import *` (Skulpt 0.11 honours `__all__`); tests import `SimNotAvailable` explicitly. |
 | `spike/vexsim.py` | VR-style `Pen` (`move`, `set_pen_color`, `set_pen_width`, `set_pen_color_rgb`; `fill` raises). Prints `vexsim v0.1`. |
-| `spike/starter/main.py` | VEXcode-style config block plus one `drive_for(FORWARD, 800, MM)`. |
+| `spike/starter/main.py` | VEXcode-style config block, then `set_drive_velocity`/`set_turn_velocity(50, PERCENT)` and `drive_for(FORWARD, 800, MM, 50, PERCENT)`. Every velocity names its units. |
 | `spike/build_starter.py` | Builds `dist/vex-starter.zip` with fixed timestamps: `python spike/build_starter.py`. |
 
 ### Port map and geometry (as shipped)
@@ -452,7 +452,7 @@ Load it with World → Load from file, and load `spike/vr-robot.json` as the rob
 | `gearsRobot.json` | `spike/vr-robot.json` |
 | `castle-crasher.json` | `spike/castle-crasher-world.json` |
 
-### Public-site round trip (2026-10-04, gears.aposteriori.com.sg, built-in browser)
+### Public-site round trip (2026-10-04, gears.aposteriori.com.sg, built-in browser; v0.1 ZIP, repeated for the current ZIP in §12)
 
 | Step | Result |
 |---|---|
@@ -475,18 +475,16 @@ The local copy gave the same centre-castle result (10/10 moved, 2/4 roofs down).
 ### Behaviour decisions
 
 - **PERCENT is a share of the sim cap.** 100% = 800°/s. RPM and `VelocityUnits.DPS` are absolute and clamp at 800°/s, with a one-time console note. `GearSetting` is accepted and stored but changes nothing.
-- **Position moves end in HOLD.** `spin_for`, `drive_for` and open-loop `turn_for` hold until wheel speed is under 5°/s (300 ms max), then apply the user's stopping mode.
-  - Stopping straight into BRAKE let the wheel coast: 360° became 434°. HOLD stops at about 369°.
-  - Measured on the VR robot (preliminary; Phase 5 will repeat these):
-    - Motor `spin_for(360)` → 372°.
-    - `drive_for(200 mm)` → 461°/462° of 458° expected.
-    - Open-loop `turn_for(RIGHT, 90)` → 85–87°.
-    - SmartDrive `turn_for(RIGHT, 90)` → 90.1°.
-    - `turn_to_heading(0)` → 0.3°.
+- **Position moves end in HOLD.** `spin_for`, `drive_for`, open-loop `turn_for` and SmartDrive turns hold until wheel speed is under 5°/s (300 ms max), then apply the user's stopping mode.
+  - Stopping straight into BRAKE let the wheel coast: 360° became 434°. HOLD stops at about 369°. SmartDrive turns at first ended in BRAKE and overshot (180° → 191°); since §12 they hold too.
+- **Position moves slow down near the target** (added in §12). While `wait=True` polls, each wheel's speed is capped at `sqrt(2 × 2000°/s² × remaining)`, with a 60°/s floor. Without this, a 100% move hit HOLD at 800°/s and the robot pitched forward: the laser read the floor (264 mm against 605 mm expected).
+- **Velocity in position moves is a magnitude.** In `spin_for`, `drive_for` and `turn_for`, direction comes from `direction × sign(value)`, and a negative velocity doesn't flip it. PROS calls this argument the "maximum allowable velocity" for relative and absolute moves. In `spin`, `drive` and `turn`, a negative velocity reverses, as PROS `move_velocity` does. The V5 docs say neither.
 - **`is_done()` grace period.** The wheel's `state` only updates on the next physics frame, so `is_done()` counts a motor as busy for 60 ms after a position command.
 - **SmartDrive turns with `wait=False` raise `SimNotAvailable`.** The closed loop needs the caller's thread.
 - **`brain.screen.print` writes immediately with `end=''`,** and `next_row()` writes the newline. Gears' console appends raw text, so nothing is lost if a program never calls `next_row()`.
-- **`Distance.is_object_detected()`** is `object_distance < 2000 mm`, the documented V5 range. With nothing in the beam, `object_distance` passes through the sim's ray length (3000 mm). The V5 docs don't say what a real sensor returns then.
+- **Distance with no object.** Anything beyond the documented 2000 mm range, including the sim's 3000 mm "no hit", returns **9999 mm** (or 9999/25.4 = 393.66 in INCHES). `is_object_detected()` is then False.
+  - Source: PROS distance docs, "Will return 9999 if the sensor can not detect an object". That reads the same firmware value VEXcode does. api.vex.com gives only the 20–2000 mm range.
+  - Below 20 mm, the sim value passes through.
 - **Skulpt 0.11 quirks hit while building:**
   - A nested function with `*args, **kwargs` can't see its enclosing scope ("Undefined variable"); unsupported methods use a callable object instead.
   - Lambdas in a module-level tuple hit the same error.
@@ -499,3 +497,94 @@ The local copy gave the same centre-castle result (10/10 moved, 2/4 roofs down).
 - **Rotation unit names.** The docs write `RotationUnits.TURNS`; the VEXcode stub has `RotationUnits.REV`. The shim provides both, as the same object.
 - **`brain.screen.print` separators differ.** Its `sep` defaults to `""`, while `print_at` and Controller `print` default to `" "`.
 - **`drive_for` and `spin_for` return values aren't documented.** The shim returns `True` when the move completed and `False` on timeout or `wait=False`.
+- **No-object Distance value isn't documented** on api.vex.com (Python, C++ or Blocks pages). The shim uses PROS's 9999 mm (see Behaviour decisions).
+- **Negative velocity in position moves isn't documented.** The shim follows PROS (see Behaviour decisions).
+- **Power-on defaults match the docs.** Motors and drivetrains start at 50% drive and turn velocity, and stopping defaults to BRAKE. The shim already did this.
+
+## 12. Test suite, demo measurements and demos (2026-10-04, public site)
+
+Everything below ran on **gears.aposteriori.com.sg**, loaded the way a student loads it:
+- **World:** Worlds → Load from file.
+- **Tabs:** File → Import zip package.
+- **Each test:** pasted into `main.py`, then Reset, then Run.
+
+**Source files.** The page fetched them from GitHub raw at commit `4c9363e`, and each matched the committed blob's SHA-256.
+
+**Harness (`spike/tests/harness.js`), automation-only.** It runs the same handlers as the UI. Three extra pieces are needed only because the automation pane throttles itself:
+- **Frame pump.** Runs Babylon's frame (`beginFrame`/render loops/`endFrame`) when `requestAnimationFrame` stalls.
+  - Without `beginFrame`, `deltaTime` stays at 0. Wheels ramp speed by `delta × acceleration`, so they never move. That's how `t_motorgroup` "hung" at first.
+- **Short timers.** `setTimeout` under 1 s, which drives Python `sleep`, fires from the same message loop while rAF is stalled.
+- **Time limit.** It resets `Sk.execStart` the way Gears' own 2 s `setInterval` does, because a throttled `setInterval` let Skulpt raise `TimeLimitError` after 5 s.
+
+**Worlds.**
+- **Test world** (`spike/tests/vex-test-world.json`, generated by `build_test_world.py`): an open 5 × 5 m floor with no arena walls. One red wall's near face is at Y = +400 mm. The robot starts at (0, −1500) mm facing it.
+- **Castle Crasher** is §10's world.
+- **The VR robot now uses `wheelMaxAcceleration: 2`** (2000°/s², 0 → 800°/s in 0.4 s). At 20, a 100% `drive_for(300 mm)` turned the wheels exactly 688° but GPS showed 253–273 mm, because the wheels spun on launch. At 2, it measures 297–305 mm. `vr-robot-styled.json` was regenerated to match.
+
+### Test results
+
+Tests are in `spike/tests/t_*.py`, with helpers in `vextest.py`. Each prints `PASS|FAIL name measured expected tol` and a `SUMMARY` line. Ground truth comes from `simPython` (GPS `in2`, gyro `in1`, raw wheel `outA`), never from the shim.
+
+| Test | Public site | Checks |
+|---|---|---|
+| t_constants | 28/28 | Enum identity and aliases, PORT1–21, GearSetting, `__all__` (no private names, no `SimNotAvailable`), version 0.1 |
+| t_wait_timer | 7/7 | `wait` MSEC/SECONDS/default, `brain.timer` time/clear, `Timer()` |
+| t_screen | 8/8 | `sep` (default ""), `precision` (default 2), `next_row`, `new_line`, `clear_screen`, captured from the shim's own writes |
+| t_motor_spin_for | 14/14 | DEGREES/TURNS, `spin_to_position`, set/reset position, `wait=False` + `is_done`/`is_spinning`, return values, `set_timeout` stops early |
+| t_motor_signs | 56/56 | `spin_for`: FORWARD/REVERSE × ±value × ±velocity × reversed (16 cases; checks the shim position and the raw wheel). `spin`: direction × ±velocity × reversed (8 cases) |
+| t_motor_velocity_units | 14/15, then 15/15 | One check failed on the first run: `RPM_200_clamped_dps` measured 697 against 800 ± 80. It passed on the rerun (812). The sibling 800°/s checks passed in all three runs (791/784, then 813/805). Counted as harness timing jitter. The clamp note printed exactly once. |
+| t_motorgroup | 10/10 | `count`, `spin_for` drives forward 155 mm, both motors move, `wait=False` |
+| t_drive_for | 13/13 | 500 mm, REVERSE, INCHES, negative distance, 100%, `wait=False`, `drive` velocity readback (GPS-checked) |
+| t_turn_for_open | 7/7 | Direction and approximate size (±20°): RIGHT/LEFT/TURNS/negative angle, `turn` |
+| t_smartdrive_turn | 8/8 | ±3°: RIGHT/LEFT 90, 180 at 30%, 0.5 TURNS, threshold 5; `wait=False` raises |
+| t_turn_to_heading | 11/11 | Shortest direction, negative heading, `turn_to_rotation` 450/360/1.5 TURNS, `set_heading` |
+| t_bumper | 8/8 | Released at start; a square hit presses both; released after backing off; a 25° hit presses left only |
+| t_distance | 11/11 | Far wall (1823 mm), mid, near (~165 mm, ±15), INCHES, default units; nothing in range → 9999 / 393.66 in, `is_object_detected` False |
+| t_inertial | 16/16 | Clockwise positive, wrap to 330, negative rotation, `set_heading`/`set_rotation`/resets, TURNS |
+| t_unsupported | 72/72 | Every stubbed method and class raises `SimNotAvailable` with its exact message |
+| t_unmapped_port | 29/29 | Motor on each unused PORT, Distance/Inertial on an empty port, 3-wire c–h, wrong device type, non-port argument |
+| t_pen | 17/17 | UP/DOWN, all colours and widths, RGB at opacity 100, bad arguments raise ValueError |
+
+All 17 tests also passed on the local copy.
+
+**Quirk found:** `simPython.Pen.isDown()` returns a raw JS boolean. Comparing it (`==`, `is`, `type()`) silently ends the program with no error. `not raw.isDown()` gives a real `bool`.
+
+### Demo measurements (5 independent runs each, Reset between runs, 50% velocity)
+
+| Measurement | Runs | Mean | Worst |
+|---|---|---|---|
+| `drive_for(FORWARD, 800, MM)`: distance error | +6.4, +0.1, +4.2, +9.4, +2.6 mm | +4.5 mm | +9.4 mm |
+| …lateral drift | 11.2, −18.4, 8.1, −7.1, −6.5 mm | 10.3 mm (abs) | 18.4 mm |
+| Open-loop `DriveTrain.turn_for(RIGHT, 90)`: heading error | −8.2, −4.2, −5.7, −7.1, −9.3° | −6.9° | −9.3° |
+| `SmartDrive.turn_for(RIGHT, 90)`: heading error | −0.25, −0.41, −0.48, −0.36, −0.64° | −0.43° | −0.64° |
+| 4 × (300 mm, right 90) open-loop: final heading error | −38.0, −28.1, −34.7, −26.5, −30.1° | −31.5° | −38.0° |
+| …final distance from start | 120, 94, 138, 103, 118 mm | 115 mm | 138 mm |
+| 4 × (300 mm, right 90) SmartDrive: final heading error | −0.7, −1.4, −4.4, +5.1, −0.9° | 2.5° (abs) | 5.1° |
+| …final distance from start | 33, 23, 29, 35, 10 mm | 26 mm | 35 mm |
+| Castle Crasher starter (`dist/vex-starter.zip`, Run × 5) | centre pieces moved: 10, 10, 10, 10, 10; roofs down: 2, 2, 2, 2, 2 | 10/10, 2/4 roofs | same every run |
+| …other castles | 0 pieces moved on every run | untouched | untouched |
+
+- **Open-loop turns.** They come in about 7° short with 120 mm track width and turn-in-place scrub. The square's heading error (−31°) is more than 4 × 7°, because the drives add heading drift too.
+- **SmartDrive squares.** Each turn lands within its 1° threshold, but SmartDrive `drive_for` doesn't hold heading, so drift from the drives remains.
+
+### Starter ZIP round trip, current build
+
+`dist/vex-starter.zip` SHA-256 `6df720e0d918d69b…`. It's built by `build_starter.py` and is byte-identical across rebuilds.
+- Pasted base64 matched all 15 chunk hashes.
+- World extracted from the ZIP: 21 objects.
+- Import gave tabs `main.py`, `vex.py`, `vexsim.py`, robot `vexVRRobot` (`wheelMaxAcceleration` 2), and project `vex-starter`. The extra JSON caused no error.
+- Run × 5: as in the table above, no console errors, 5.7–5.8 s each.
+
+### Demos (`spike/demo/`, public site)
+
+Each demo is the starter's config block plus an explicit-units body.
+
+| Demo | World | Result |
+|---|---|---|
+| d1_crash | Castle Crasher | "Crashed!"; centre castle 10/10 moved, 2/4 roofs down |
+| d2_distance | Castle Crasher | Start 573 mm, stopped at 140 mm (30% and 20 ms polling overshoot the 150 mm line by 10 mm) |
+| d3_bumper | `spike/vr-test-world.json` (walled) | 3 bumps in 20 s: back up 200 mm and turn right each time |
+| d4_open_vs_smart | Castle Crasher | Open-loop −25.7°, SmartDrive +3.0° (local copy: −18.7° / +3.6°) |
+| d5_pen_square | Castle Crasher | One continuous blue trace, a visible square (the corner doesn't quite close) |
+
+**The d4 gap is easy to see.** About 26° against 3° in one run, and about 31° against 2.5° on average in the 5-run measurement, so it needs no variant.

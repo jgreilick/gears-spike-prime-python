@@ -2,8 +2,9 @@
 // It drives the page the way a student does: Worlds -> Load from file, File -> Import zip,
 // paste a test into main.py, press Reset, press Run, read the console.
 // Automation-only pieces (not needed by students):
-//   - pump(): calls Babylon's render loop when requestAnimationFrame stalls (a hidden or
-//     throttled automation pane freezes physics otherwise).
+//   - pump(): when requestAnimationFrame stalls (a hidden or throttled automation pane), runs
+//     Babylon's frame itself, fires short setTimeouts (Python sleep) from the same message
+//     loop, and keeps Skulpt's time limit reset the way Gears' own 2 s setInterval does.
 //   - stubFileDialog()/feed(): the site opens pickers by clicking a detached <input type=file>;
 //     we skip only that native dialog, then hand the input a File and fire 'change' so the
 //     site's own loader runs.
@@ -17,11 +18,43 @@ window.VT = (function() {
     window._vtLastRaf = performance.now();
     window._vtPumped = 0;
     (function raf() { window._vtLastRaf = performance.now(); requestAnimationFrame(raf); })();
+    const stalled = () => performance.now() - window._vtLastRaf > 50;
+    const timers = [];
+    let seq = 0;
+    const nativeSetTimeout = window.setTimeout.bind(window);
+    const nativeClearTimeout = window.clearTimeout.bind(window);
+    window.setTimeout = function(fn, ms) {
+      const args = [].slice.call(arguments, 2);
+      if (typeof fn === 'function' && (ms || 0) < 1000 && stalled()) {
+        timers.push({id: ++seq, due: performance.now() + (ms || 0), fn, args});
+        return -seq;
+      }
+      return nativeSetTimeout.apply(null, arguments);
+    };
+    window.clearTimeout = function(id) {
+      if (id < 0) {
+        const i = timers.findIndex(t => t.id === -id);
+        if (i >= 0) timers.splice(i, 1);
+      } else {
+        nativeClearTimeout(id);
+      }
+    };
     const ch = new MessageChannel();
     let last = performance.now();
+    let lastExecReset = 0;
     ch.port1.onmessage = () => {
       const now = performance.now();
-      if (now - window._vtLastRaf > 50 && now - last >= 16) {
+      for (let i = timers.length - 1; i >= 0; i--) {
+        if (timers[i].due <= now) {
+          const t = timers.splice(i, 1)[0];
+          t.fn.apply(null, t.args);
+        }
+      }
+      if (now - lastExecReset > 1000) {
+        lastExecReset = now;
+        if (skulpt.running) Sk.execStart = Date();   // same assignment as Gears' skulpt.js
+      }
+      if (stalled() && now - last >= 16) {
         last = now;
         const engine = babylon.engine;
         engine.beginFrame();   // measures deltaTime; wheel ramping is delta x acceleration
@@ -80,10 +113,14 @@ window.VT = (function() {
     await sleep(3000);
   }
 
-  async function importZip(bytes) {
+  async function importZip(bytes, expectTabs) {
     await openMenu('File', 'Import zip package from your computer');
     await feed('project.zip', bytes, 'application/zip');
-    await sleep(3000);
+    for (let i = 0; i < 100; i++) {
+      await sleep(100);
+      if ((expectTabs || []).every(t => t in filesManager.files)) break;
+    }
+    await sleep(1000);
   }
 
   function setMain(code) {

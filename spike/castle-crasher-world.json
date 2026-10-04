@@ -1,0 +1,456 @@
+{
+ "worldName": "custom",
+ "options": {
+  "imageURL": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAcwAAAHMCAIAAADXuQ/RAAAE3klEQVR42u3YsQkAIRBFQT3sw7X/otROLMBMEE6YKcDgB4/FPCISAHd8JgAQWQCRBUBkAUQWQGQBEFkAkQUQWQBEFkBkAUQWAJEFEFkAkQVAZAFEFkBkARBZAJEFQGQBRBZAZAEQWQCRBRBZAEQWQGQBRBaAc+Xe07V3+wJPmK25ZAGS7wIARBZAZAFEFgCRBRBZAJEFQGQBRBZAZAEQWQCRBRBZAEQWQGQBRBYAkQUQWQBEFkBkAUQWAJEFEFkAkQVAZAFEFkBkARBZAJEFEFkARBZAZAFEFgCRBRBZAEQWQGQBRBYAkQUQWQCRBUBkAUQWQGQBEFkAkQUQWQBEFkBkAUQWAJEFEFkARBZAZAFEFgCRBRBZAJEFQGQBRBZAZAEQWQCRBRBZAEQWQGQBRBYAkQUQWQBEFkBkAUQWAJEFEFkAkQVAZAFEFkBkARBZAJEFEFkARBZAZAFEFgCRBRBZAEQWQGQBRBYAkQUQWQCRBUBkAUQWQGQBEFkAkQUQWQBEFkBkAUQWAJEFEFkARBZAZAFEFgCRBRBZAJEFQGQBRBZAZAEQWQCRBRBZAEQWQGQBRBYAkQUQWQBEFkBkAUQWAJEFEFkAkQVAZAFEFkBkARBZAJEFEFkARBZAZAFEFgCRBRBZAEQWQGQBRBYAkQUQWQCRBUBkAUQWQGQBEFkAkQUQWQBEFkBkAUQWAJEFEFkARBZAZAFEFgCRBRBZAJEFQGQBRBZAZAEQWQCRBRBZAEQWQGQBRBYAkQUQWQBEFkBkAUQWAJEFEFkAkQVAZAFEFkBkARBZAJEFEFkARBZAZAFEFgCRBRBZAJE1AYDIAogsACILILIAIguAyAKILIDIAiCyACILILIAiCyAyAKILAAiCyCyACILgMgCiCwAIgsgsgAiC4DIAogsgMgCILIAIgsgsgCILIDIAogsACILILIAIguAyAKILAAiCyCyACILgMgCiCyAyAIgsgAiCyCyAIgsgMgCiCwAIgsgsgAiC4DIAogsACILILIAIguAyAKILIDIAiCyACILILIAiCyAyAKILAAiCyCyACILgMgCiCwAIgsgsgAiC4DIAogsgMgCILIAIgsgsgCILIDIAogsACILILIAIguAyAKILAAiCyCyACILgMgCiCyAyAIgsgAiCyCyAIgsgMgCiCwAIgsgsgAiC4DIAogsACILILIAIguAyAKILIDIAiCyACILILIAiCyAyAKILAAiCyCyACILgMgCiCwAIgsgsgAiC4DIAogsgMgCILIAIgsgsgCILIDIAogsACILILIAIguAyAKILAAiCyCyACILgMgCiCyAyAIgsgAiCyCyAIgsgMgCiCwAIgsgsgAiC4DIAogsACILILIAIguAyAKILIDIAiCyACILILIAiCyAyAKILAAiCyCyACILgMgCiCwAIgsgsgAiC4DIAogsgMgCILIAIgsgsgCILIDIAogsACILILIAIguAyAKILAAiCyCyACILgMgCiCyAyAIgsgAiCyCyAIgsgMgCiCwAIgsgsgAiC4DIAogsACILILIAIgvAJo8IKwC4ZAFEFgCRBRBZAJEFQGQBRBZAZAEQWQCRBRBZAEQWQGQBRBYAkQUQWQCRBUBkAUQWAJEFEFkAkQVAZAFEFkBkARBZAJEFEFkARBbgfxapkwjZYi7KTAAAAABJRU5ErkJggg==",
+  "groundType": "box",
+  "uScale": 1,
+  "vScale": 1,
+  "imageScale": 5.0,
+  "timer": "none",
+  "wall": false,
+  "startPos": "center",
+  "startPosXYZStr": "0, -81, 0",
+  "startRotStr": "0",
+  "objects": [
+   {
+    "type": "box",
+    "position": [
+     -7.5,
+     0,
+     10.0
+    ],
+    "size": [
+     15,
+     30,
+     20
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 18.0,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "box",
+    "position": [
+     7.5,
+     0,
+     10.0
+    ],
+    "size": [
+     15,
+     30,
+     20
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 18.0,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "box",
+    "position": [
+     -7.5,
+     -7.5,
+     25.0
+    ],
+    "size": [
+     10,
+     10,
+     10
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 2.0,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADQwAAAAAAAANDAAAAAAAAAEEEAAAAAAADQQAAAAAAAANDAAADQQAAAAAAAANDAAAAAAAAAEEEAAAAAAADQQAAAAAAAANBAAADQQAAAAAAAANBAAAAAAAAAEEEAAAAAAADQwAAAAAAAANBAAADQwAAAAAAAANBAAAAAAAAAEEEAAAAAAADQwAAAAAAAANDAAADQwAAAAAAAANDAAADQQAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANBAAAAAgLXiFT+tiE+/AAAAgLXiFT+tiE+/AAAAgLXiFT+tiE+/rYhPP7XiFT8AAACArYhPP7XiFT8AAACArYhPP7XiFT8AAACAAAAAALXiFT+tiE8/AAAAALXiFT+tiE8/AAAAALXiFT+tiE8/rYhPv7XiFT8AAACArYhPv7XiFT8AAACArYhPv7XiFT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.5,0,-6.5],\"max\":[6.5,9,6.5]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     -7.5,
+     -7.5,
+     34.5
+    ],
+    "physicsOptions": {
+     "mass": 1.01,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "box",
+    "position": [
+     -7.5,
+     7.5,
+     25.0
+    ],
+    "size": [
+     10,
+     10,
+     10
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 2.0,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADQwAAAAAAAANDAAAAAAAAAEEEAAAAAAADQQAAAAAAAANDAAADQQAAAAAAAANDAAAAAAAAAEEEAAAAAAADQQAAAAAAAANBAAADQQAAAAAAAANBAAAAAAAAAEEEAAAAAAADQwAAAAAAAANBAAADQwAAAAAAAANBAAAAAAAAAEEEAAAAAAADQwAAAAAAAANDAAADQwAAAAAAAANDAAADQQAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANBAAAAAgLXiFT+tiE+/AAAAgLXiFT+tiE+/AAAAgLXiFT+tiE+/rYhPP7XiFT8AAACArYhPP7XiFT8AAACArYhPP7XiFT8AAACAAAAAALXiFT+tiE8/AAAAALXiFT+tiE8/AAAAALXiFT+tiE8/rYhPv7XiFT8AAACArYhPv7XiFT8AAACArYhPv7XiFT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.5,0,-6.5],\"max\":[6.5,9,6.5]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     -7.5,
+     7.5,
+     34.5
+    ],
+    "physicsOptions": {
+     "mass": 1.01,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "box",
+    "position": [
+     7.5,
+     -7.5,
+     25.0
+    ],
+    "size": [
+     10,
+     10,
+     10
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 2.0,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADQwAAAAAAAANDAAAAAAAAAEEEAAAAAAADQQAAAAAAAANDAAADQQAAAAAAAANDAAAAAAAAAEEEAAAAAAADQQAAAAAAAANBAAADQQAAAAAAAANBAAAAAAAAAEEEAAAAAAADQwAAAAAAAANBAAADQwAAAAAAAANBAAAAAAAAAEEEAAAAAAADQwAAAAAAAANDAAADQwAAAAAAAANDAAADQQAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANBAAAAAgLXiFT+tiE+/AAAAgLXiFT+tiE+/AAAAgLXiFT+tiE+/rYhPP7XiFT8AAACArYhPP7XiFT8AAACArYhPP7XiFT8AAACAAAAAALXiFT+tiE8/AAAAALXiFT+tiE8/AAAAALXiFT+tiE8/rYhPv7XiFT8AAACArYhPv7XiFT8AAACArYhPv7XiFT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.5,0,-6.5],\"max\":[6.5,9,6.5]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     7.5,
+     -7.5,
+     34.5
+    ],
+    "physicsOptions": {
+     "mass": 1.01,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "box",
+    "position": [
+     7.5,
+     7.5,
+     25.0
+    ],
+    "size": [
+     10,
+     10,
+     10
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 2.0,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADQwAAAAAAAANDAAAAAAAAAEEEAAAAAAADQQAAAAAAAANDAAADQQAAAAAAAANDAAAAAAAAAEEEAAAAAAADQQAAAAAAAANBAAADQQAAAAAAAANBAAAAAAAAAEEEAAAAAAADQwAAAAAAAANBAAADQwAAAAAAAANBAAAAAAAAAEEEAAAAAAADQwAAAAAAAANDAAADQwAAAAAAAANDAAADQQAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANBAAAAAgLXiFT+tiE+/AAAAgLXiFT+tiE+/AAAAgLXiFT+tiE+/rYhPP7XiFT8AAACArYhPP7XiFT8AAACArYhPP7XiFT8AAACAAAAAALXiFT+tiE8/AAAAALXiFT+tiE8/AAAAALXiFT+tiE8/rYhPv7XiFT8AAACArYhPv7XiFT8AAACArYhPv7XiFT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.5,0,-6.5],\"max\":[6.5,9,6.5]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     7.5,
+     7.5,
+     34.5
+    ],
+    "physicsOptions": {
+     "mass": 1.01,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "box",
+    "position": [
+     -76.5,
+     75,
+     4.0
+    ],
+    "size": [
+     30,
+     30,
+     8
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 14.4,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADYwAAAAAAAANjAAAAAAAAAAEEAAAAAAADYQAAAAAAAANjAAADYQAAAAAAAANjAAAAAAAAAAEEAAAAAAADYQAAAAAAAANhAAADYQAAAAAAAANhAAAAAAAAAAEEAAAAAAADYwAAAAAAAANhAAADYwAAAAAAAANhAAAAAAAAAAEEAAAAAAADYwAAAAAAAANjAAADYwAAAAAAAANjAAADYQAAAAAAAANjAAADYQAAAAAAAANhAAADYwAAAAAAAANjAAADYQAAAAAAAANhAAADYwAAAAAAAANhAAAAAgEMWJT+bqEO/AAAAgEMWJT+bqEO/AAAAgEMWJT+bqEO/m6hDP0MWJT8AAACAm6hDP0MWJT8AAACAm6hDP0MWJT8AAACAAAAAAEMWJT+bqEM/AAAAAEMWJT+bqEM/AAAAAEMWJT+bqEM/m6hDv0MWJT8AAACAm6hDv0MWJT8AAACAm6hDv0MWJT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.75,0,-6.75],\"max\":[6.75,8,6.75]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     -84.75,
+     66.75,
+     12.0
+    ],
+    "physicsOptions": {
+     "mass": 0.97,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADYwAAAAAAAANjAAAAAAAAAAEEAAAAAAADYQAAAAAAAANjAAADYQAAAAAAAANjAAAAAAAAAAEEAAAAAAADYQAAAAAAAANhAAADYQAAAAAAAANhAAAAAAAAAAEEAAAAAAADYwAAAAAAAANhAAADYwAAAAAAAANhAAAAAAAAAAEEAAAAAAADYwAAAAAAAANjAAADYwAAAAAAAANjAAADYQAAAAAAAANjAAADYQAAAAAAAANhAAADYwAAAAAAAANjAAADYQAAAAAAAANhAAADYwAAAAAAAANhAAAAAgEMWJT+bqEO/AAAAgEMWJT+bqEO/AAAAgEMWJT+bqEO/m6hDP0MWJT8AAACAm6hDP0MWJT8AAACAm6hDP0MWJT8AAACAAAAAAEMWJT+bqEM/AAAAAEMWJT+bqEM/AAAAAEMWJT+bqEM/m6hDv0MWJT8AAACAm6hDv0MWJT8AAACAm6hDv0MWJT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.75,0,-6.75],\"max\":[6.75,8,6.75]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     -84.75,
+     83.25,
+     12.0
+    ],
+    "physicsOptions": {
+     "mass": 0.97,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADYwAAAAAAAANjAAAAAAAAAAEEAAAAAAADYQAAAAAAAANjAAADYQAAAAAAAANjAAAAAAAAAAEEAAAAAAADYQAAAAAAAANhAAADYQAAAAAAAANhAAAAAAAAAAEEAAAAAAADYwAAAAAAAANhAAADYwAAAAAAAANhAAAAAAAAAAEEAAAAAAADYwAAAAAAAANjAAADYwAAAAAAAANjAAADYQAAAAAAAANjAAADYQAAAAAAAANhAAADYwAAAAAAAANjAAADYQAAAAAAAANhAAADYwAAAAAAAANhAAAAAgEMWJT+bqEO/AAAAgEMWJT+bqEO/AAAAgEMWJT+bqEO/m6hDP0MWJT8AAACAm6hDP0MWJT8AAACAm6hDP0MWJT8AAACAAAAAAEMWJT+bqEM/AAAAAEMWJT+bqEM/AAAAAEMWJT+bqEM/m6hDv0MWJT8AAACAm6hDv0MWJT8AAACAm6hDv0MWJT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.75,0,-6.75],\"max\":[6.75,8,6.75]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     -68.25,
+     66.75,
+     12.0
+    ],
+    "physicsOptions": {
+     "mass": 0.97,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADYwAAAAAAAANjAAAAAAAAAAEEAAAAAAADYQAAAAAAAANjAAADYQAAAAAAAANjAAAAAAAAAAEEAAAAAAADYQAAAAAAAANhAAADYQAAAAAAAANhAAAAAAAAAAEEAAAAAAADYwAAAAAAAANhAAADYwAAAAAAAANhAAAAAAAAAAEEAAAAAAADYwAAAAAAAANjAAADYwAAAAAAAANjAAADYQAAAAAAAANjAAADYQAAAAAAAANhAAADYwAAAAAAAANjAAADYQAAAAAAAANhAAADYwAAAAAAAANhAAAAAgEMWJT+bqEO/AAAAgEMWJT+bqEO/AAAAgEMWJT+bqEO/m6hDP0MWJT8AAACAm6hDP0MWJT8AAACAm6hDP0MWJT8AAACAAAAAAEMWJT+bqEM/AAAAAEMWJT+bqEM/AAAAAEMWJT+bqEM/m6hDv0MWJT8AAACAm6hDv0MWJT8AAACAm6hDv0MWJT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.75,0,-6.75],\"max\":[6.75,8,6.75]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     -68.25,
+     83.25,
+     12.0
+    ],
+    "physicsOptions": {
+     "mass": 0.97,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "box",
+    "position": [
+     75.5,
+     73,
+     5.5
+    ],
+    "size": [
+     13,
+     13,
+     11
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 3.72,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADQwAAAAAAAANDAAAAAAAAAAEEAAAAAAADQQAAAAAAAANDAAADQQAAAAAAAANDAAAAAAAAAAEEAAAAAAADQQAAAAAAAANBAAADQQAAAAAAAANBAAAAAAAAAAEEAAAAAAADQwAAAAAAAANBAAADQwAAAAAAAANBAAAAAAAAAAEEAAAAAAADQwAAAAAAAANDAAADQwAAAAAAAANDAAADQQAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANBAAAAAgIVuIT9or0a/AAAAgIVuIT9or0a/AAAAgIVuIT9or0a/aK9GP4VuIT8AAACAaK9GP4VuIT8AAACAaK9GP4VuIT8AAACAAAAAAIVuIT9or0Y/AAAAAIVuIT9or0Y/AAAAAIVuIT9or0Y/aK9Gv4VuIT8AAACAaK9Gv4VuIT8AAACAaK9Gv4VuIT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.5,0,-6.5],\"max\":[6.5,8,6.5]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     75.5,
+     73,
+     15.0
+    ],
+    "physicsOptions": {
+     "mass": 0.9,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "box",
+    "position": [
+     -76.5,
+     -73,
+     5.5
+    ],
+    "size": [
+     13,
+     13,
+     11
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 3.72,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AADQwAAAAAAAANDAAAAAAAAAAEEAAAAAAADQQAAAAAAAANDAAADQQAAAAAAAANDAAAAAAAAAAEEAAAAAAADQQAAAAAAAANBAAADQQAAAAAAAANBAAAAAAAAAAEEAAAAAAADQwAAAAAAAANBAAADQwAAAAAAAANBAAAAAAAAAAEEAAAAAAADQwAAAAAAAANDAAADQwAAAAAAAANDAAADQQAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANDAAADQQAAAAAAAANBAAADQwAAAAAAAANBAAAAAgIVuIT9or0a/AAAAgIVuIT9or0a/AAAAgIVuIT9or0a/aK9GP4VuIT8AAACAaK9GP4VuIT8AAACAaK9GP4VuIT8AAACAAAAAAIVuIT9or0Y/AAAAAIVuIT9or0Y/AAAAAIVuIT9or0Y/aK9Gv4VuIT8AAACAaK9Gv4VuIT8AAACAaK9Gv4VuIT8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-6.5,0,-6.5],\"max\":[6.5,8,6.5]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     -76.5,
+     -73,
+     15.0
+    ],
+    "physicsOptions": {
+     "mass": 0.9,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "box",
+    "position": [
+     73,
+     -74.5,
+     6.0
+    ],
+    "size": [
+     24,
+     24,
+     12
+    ],
+    "color": "#4D4D4D",
+    "physicsOptions": {
+     "mass": 13.82,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   },
+   {
+    "type": "model",
+    "modelURL": "data:{\"asset\":{\"version\":\"2.0\",\"generator\":\"gears castle-crasher build_world.py\"},\"scene\":0,\"scenes\":[{\"nodes\":[0]}],\"nodes\":[{\"mesh\":0,\"name\":\"roof\"}],\"meshes\":[{\"primitives\":[{\"attributes\":{\"POSITION\":0,\"NORMAL\":1},\"material\":0}]}],\"materials\":[{\"pbrMetallicRoughness\":{\"baseColorFactor\":[1.0,0.8,0.0,1],\"metallicFactor\":0,\"roughnessFactor\":0.9},\"doubleSided\":true}],\"buffers\":[{\"byteLength\":432,\"uri\":\"data:application/octet-stream;base64,AABAwQAAAAAAAEDBAAAAAAAAcEEAAAAAAABAQQAAAAAAAEDBAABAQQAAAAAAAEDBAAAAAAAAcEEAAAAAAABAQQAAAAAAAEBBAABAQQAAAAAAAEBBAAAAAAAAcEEAAAAAAABAwQAAAAAAAEBBAABAwQAAAAAAAEBBAAAAAAAAcEEAAAAAAABAwQAAAAAAAEDBAABAwQAAAAAAAEDBAABAQQAAAAAAAEDBAABAQQAAAAAAAEBBAABAwQAAAAAAAEDBAABAQQAAAAAAAEBBAABAwQAAAAAAAEBBAAAAgATsHz8F50e/AAAAgATsHz8F50e/AAAAgATsHz8F50e/BedHPwTsHz8AAACABedHPwTsHz8AAACABedHPwTsHz8AAACAAAAAAATsHz8F50c/AAAAAATsHz8F50c/AAAAAATsHz8F50c/BedHvwTsHz8AAACABedHvwTsHz8AAACABedHvwTsHz8AAACAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAAAAAAAAAAgL8AAAAA\"}],\"bufferViews\":[{\"buffer\":0,\"byteOffset\":0,\"byteLength\":216},{\"buffer\":0,\"byteOffset\":216,\"byteLength\":216}],\"accessors\":[{\"bufferView\":0,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\",\"min\":[-12.0,0,-12.0],\"max\":[12.0,15,12.0]},{\"bufferView\":1,\"componentType\":5126,\"count\":18,\"type\":\"VEC3\"}]}",
+    "modelScale": 1,
+    "position": [
+     73,
+     -74.5,
+     19.5
+    ],
+    "physicsOptions": {
+     "mass": 5.76,
+     "friction": 0.3,
+     "restitution": 0.05,
+     "dampLinear": 0,
+     "dampAngular": 0,
+     "group": 1,
+     "mask": -1
+    }
+   }
+  ]
+ }
+}

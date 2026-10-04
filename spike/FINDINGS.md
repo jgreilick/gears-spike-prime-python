@@ -329,3 +329,79 @@ A look-alike version, still JSON only. It is generated from `vr-robot.json` by `
   - A real GLB body. Robots don't support `modelURL`, unlike world objects.
 - **Tests.** All nine tests pass on both robots against the final `vr-test-world.json` (2026-10-03).
 - **Screenshots while the pane is hidden.** The pane's screenshots go stale, so use `BABYLON.Tools.CreateScreenshotUsingRenderTargetAsync(engine, cameraArc, …)`. Set `cameraArc.target` directly; `setTarget()` recomputes alpha, beta and radius from the old position.
+
+## 10. Castle Crasher playground (`spike/castle-crasher-world.json`)
+
+A Gears custom world laid out like VEXcode VR's Castle Crasher. It uses no source changes and no VEX assets.
+`spike/castle-crasher/build_world.py` (needs Pillow) generates it. The floor PNG and the pyramid roof glTF are
+both drawn by the script and embedded as `data:` URLs, so the 25 KB JSON loads from anywhere.
+Load it with World → Load from file, and load `spike/vr-robot.json` as the robot.
+
+| File | Purpose |
+|---|---|
+| `castle-crasher/build_world.py` | Generates the world. Layout, sizes and physics constants are at the top. |
+| `castle-crasher/01_center_castle.py` | Checks the start pose, then `drive_for` 800 mm into the centre castle and backs off. |
+| `castle-crasher/02_corner_castles.py` | Gyro+GPS navigation that reaches and rams all four corner castles in one run, staying clear of the centre. |
+| `castle-crasher/03_border.py` | The down eye sees the red band at the field edge; driving on falls off the table. |
+| `castle-crasher/check_castles.js` | Console snippet that reports, per castle, pieces moved and roofs knocked down. |
+| `castle-crasher/preview-*.png` | Renders: start view, top-down, and after the centre crash. |
+
+### Coordinates
+
+- **Ground:** 230 × 230 cm, centred on the origin. That's a 460 px image at `imageScale: 5`, since ground size comes from the image (§8).
+  The white field is ±100 cm (2000 mm), with a 15 cm red band outside it.
+- **GPS matches VEX:** GPS × 10 = VEX mm, with +Y away from the start and +X to the robot's right.
+- **Start:** `startPosXYZStr: "0, -81, 0"`. The body centre sits 1 cm behind the axle, and the GPS is over the axle (the VR "centre turning point"), so it reads **(0, −800) mm**. Facing +Y.
+- **Scale check:** the start is 800 mm from the centre castle and the robot's front is about 85 mm ahead of the GPS, so contact comes after about 565 mm. A `drive_for(800)` hits the castle and shoves about 235 mm into it, as VEX's first challenge expects.
+
+### Castles: 21 loose pieces, each its own physics body
+
+| Castle | Centre (mm) | Pieces | Build (cm) |
+|---|---|---|---|
+| Centre | (0, 0) | 10 | 2 base halves 15×30×20 (the seam visible in the 3D view), 4 towers 10×10×10, 4 roofs 13 wide × 9 tall |
+| Top-left | (−765, 750) | 5 | one base slab 30×30×8, 4 roofs 13.5 × 8 (the dark "cross" seen from above) |
+| Top-right | (755, 730) | 2 | block 13×13×11, roof 13 × 8 |
+| Bottom-left | (−765, −730) | 2 | block 13×13×11, roof 13 × 8 |
+| Bottom-right | (730, −745) | 2 | block 24×24×12, roof 24 × 15 |
+
+- Centres and footprints come from the two top-down screenshots, which agree to about ±20 mm. Heights come from the 3D view, so they are estimates.
+- Physics: `mass = 0.002 × volume`, so a base half is 18 against the robot's 1400. Friction is 0.3 and restitution 0.05.
+  - I tuned these in the sim. At density 0.02 and friction 0.6, the robot pushed the whole centre castle 22 cm as one piece and knocked nothing off.
+  - Ammo multiplies the two bodies' frictions, so block-on-block is 0.09 and block-on-floor is 0.3. The pushed base shoots out from under the towers.
+- All stacks are stable at rest: less than 0.5 mm of settling over 3 s.
+
+### Border
+
+- **No walls, on purpose (`wall: false`).** In the VEX 3D view (screenshot 3, zoomed) the red edge is a flat stripe flush with the floor, with empty grey void beyond and no wall face.
+- 03 confirms the down eye reads red right at y = −1000 mm, and the robot falls off at the outer edge (altitude −51 mm at y = −1243).
+
+### Test results (2026-10-03, `vr-robot.json`, built-in browser)
+
+| Test | Result |
+|---|---|
+| Start pose | GPS (0, −800) mm, heading 0. Passed on every run. |
+| 01 `drive_for` 800 | Bumpers hit and the robot travels 789–797 mm. **The centre castle broke on 3/3 runs:** 1–2 of 4 roofs knocked off and 5–10 of 10 pieces displaced. No other castle moved. |
+| 02 corners | **All four reached on 2/2 runs.** Top-right, bottom-left and bottom-right are flattened (roof off); top-left loses 2/4 roofs. The centre is untouched. Takes about 32 s. |
+| 03 border | Floor is white at the start, red is seen at the edge, and the robot falls off. |
+
+### What doesn't match
+
+1. **There is no pyramid primitive.** Custom-world objects are only box, cylinder, sphere and model.
+   - Roofs are `model` objects pointing at a generated glTF (`data:{json}`), which Babylon 4.2's glTF loader direct-loads.
+   - **Physically each roof is a box.** Gears gives models a box impostor the size of their bounding box, so roofs tumble like cubes, and the laser/ultrasonic hit an invisible box around the pyramid.
+2. **Compound objects exist but can't topple apart.** `type: "compound"` parents its children to the first object, which makes one rigid body. Loose stacked objects are the only way to get blocks that fall separately.
+3. **The centre castle breaks but doesn't flatten.** Gears' VR robot is low (bumpers about 3 cm up), so it can only push the base, which slides; it can't tip a 20 cm block.
+   - Towers fall when the base is shoved out from under them. Usually 1–2 roofs come off and the far half stays standing.
+   - That resembles VEX's own post-crash view (screenshot 1, where half the centre castle is still up), but it is weaker than "everything falls".
+   - The impact also deflects the robot 30–110 mm to the left.
+   - Ammo is not deterministic across runs: one setting gave 2, 1 and 1 roofs.
+4. **Python can't see world objects.** Robot.js's `ObjectTracker` looks meshes up by `objectTrackerLabel`, which a custom world can't set; only the football world sets it.
+   - So the tests check reach with bumpers and GPS, and topples with `check_castles.js`.
+   - A VEX-style "castles crashed" counter would need a source change, either labels from world JSON or a world-side scorer.
+5. **Look:**
+   - Blocks are dark grey, as in the top-down and thumbnail screenshots. VEX's current 3D view shows them light grey.
+   - That 3D view also shows a green cone at the bottom-right where the top-down views show a yellow pyramid. I followed the top-down views.
+   - The red band's width differs between screenshots: wide in screenshot 1, a hairline in screenshot 4. I used 150 mm, outside the 2000 mm field.
+6. **Automation gotcha:**
+   - The render loop only runs while the Simulator tab is active (`babylon.js:205`). Driving the page from JS needs `$('#navSim').click()` before anything moves.
+   - The hidden-pane render pump (§8) is also needed. `engine` isn't global; use `babylon.engine`.

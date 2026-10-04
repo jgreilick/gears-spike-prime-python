@@ -405,3 +405,97 @@ Load it with World → Load from file, and load `spike/vr-robot.json` as the rob
 6. **Automation gotcha:**
    - The render loop only runs while the Simulator tab is active (`babylon.js:205`). Driving the page from JS needs `$('#navSim').click()` before anything moves.
    - The hidden-pane render pump (§8) is also needed. `engine` isn't global; use `babylon.engine`.
+
+## 11. MVP shim and starter ZIP (`spike/vex.py`, `spike/vexsim.py`, `dist/vex-starter.zip`)
+
+### Files
+
+| File | Purpose |
+|---|---|
+| `spike/vex.py` | V5 Python subset over `simPython`. Prints `vex shim v0.1`. `__all__` keeps internals and `SimNotAvailable` out of `import *` (Skulpt 0.11 honours `__all__`); tests import `SimNotAvailable` explicitly. |
+| `spike/vexsim.py` | VR-style `Pen` (`move`, `set_pen_color`, `set_pen_width`, `set_pen_color_rgb`; `fill` raises). Prints `vexsim v0.1`. |
+| `spike/starter/main.py` | VEXcode-style config block plus one `drive_for(FORWARD, 800, MM)`. |
+| `spike/build_starter.py` | Builds `dist/vex-starter.zip` with fixed timestamps: `python spike/build_starter.py`. |
+
+### Port map and geometry (as shipped)
+
+| V5 | Device | Gears |
+|---|---|---|
+| `Ports.PORT1` | left drive motor | outA |
+| `Ports.PORT10` | right drive motor (mounted mirrored, so VEXcode's `reverse=True` drives forward) | outB |
+| `Ports.PORT3` | Inertial | in1 (GyroSensor) |
+| `Ports.PORT4` | Distance | in5 (LaserRangeSensor) |
+| `three_wire_port.a` / `.b` | left / right Bumper | in3 / in4 |
+| (vexsim) | Pen | in8 |
+
+- Starter geometry: `SmartDrive(..., 157.08, 120, 50.8, MM, 1)`. That is wheelTravel = π × 50 mm, track 120 mm (§8 estimate) and VEX VR's published 50.8 mm wheelbase. Gears has no rear axle, so the shim stores `wheelBase` but doesn't use it.
+- Constructing a device on an empty port raises `SimNotAvailable("Nothing is plugged into PORT7 on the sim robot.")`. A wrong device type gives "PORT3 on the sim robot is an Inertial, not a Motor."
+
+### Project ZIP: answer
+
+- **Layout:** Gears' Export writes `gearsBlocks.xml`, every tab (`*.py`), `gearsRobot.json` (`robot.options`) and `meta.json` (`{name, pythonModified}`).
+- **Import** (`main.js` `loadZipFromComputer`):
+  - It first deletes all tabs.
+  - It reads `meta.json`, then `gearsBlocks.xml` if present, then `gearsRobot.json` (via `loadRobot`), then every name ending in `.py`. `gearsPython.py` is renamed to `main.py`.
+  - Any other file is ignored.
+- **`pythonModified: true` is required.** Otherwise Blockly keeps ownership of `main.py`.
+- **The world never rides in the ZIP.** We ship `castle-crasher.json` at the ZIP root for students to extract. Import ignores it, as verified below.
+- **Setup is two steps:** (1) Worlds → Load from file with the extracted `castle-crasher.json`; (2) File → Import zip package. Loading the robot during step 2 doesn't reset the world.
+
+`dist/vex-starter.zip` contents (no `gearsBlocks.xml`):
+
+| Entry | Source |
+|---|---|
+| `meta.json` | `{"name": "vex-starter", "pythonModified": true}` |
+| `main.py` | `spike/starter/main.py` |
+| `vex.py`, `vexsim.py` | `spike/` |
+| `gearsRobot.json` | `spike/vr-robot.json` |
+| `castle-crasher.json` | `spike/castle-crasher-world.json` |
+
+### Public-site round trip (2026-10-04, gears.aposteriori.com.sg, built-in browser)
+
+| Step | Result |
+|---|---|
+| ZIP bytes in the page | SHA-256 `5eb9c55364edfdb0…`, the same as the built file |
+| 1. Worlds → Load from file (`castle-crasher.json` extracted from the ZIP with JSZip) | World `custom`, 21 objects, no error modal or JS error |
+| 2. File → Import zip package | Tabs `main.py`, `vex.py`, `vexsim.py`; robot `vexVRRobot` with all 9 components; project name `vex-starter`; world unchanged; no error from the extra JSON |
+| 3. Run button | Console `vex shim v0.1 / Calibrating`, no errors, 5.4 s. **Centre castle: 10/10 pieces moved, 2/4 roofs down. Other castles untouched.** The robot travelled 792 mm. |
+
+The local copy gave the same centre-castle result (10/10 moved, 2/4 roofs down).
+
+**Harness notes (automation only, not student-facing):**
+- **Pane blocks public→localhost requests.** The built-in browser blocks fetches from the public site to localhost (`ERR_BLOCKED_BY_CLIENT`), even with CORS headers.
+  - The ZIP went in as base64 instead, checked per 1 KB chunk with SHA-256. Hand-pasting was wrong once and was caught by the hash.
+- **File pickers.** The site opens them by dispatching `click` on a detached `<input type=file>`.
+  - The harness stubbed only that click, then set `input.files` with a `DataTransfer` and fired `change`.
+  - Everything after that is the site's own handler, reached from the real menu items.
+- **Frozen physics.** The pane can stop running `requestAnimationFrame` while `document.hidden` is still `false`. Physics freezes, and the first Run "finished" with the robot never moving.
+  - The pump from §8 has to trigger on stalled rAF frames, not on `document.hidden`.
+
+### Behaviour decisions
+
+- **PERCENT is a share of the sim cap.** 100% = 800°/s. RPM and `VelocityUnits.DPS` are absolute and clamp at 800°/s, with a one-time console note. `GearSetting` is accepted and stored but changes nothing.
+- **Position moves end in HOLD.** `spin_for`, `drive_for` and open-loop `turn_for` hold until wheel speed is under 5°/s (300 ms max), then apply the user's stopping mode.
+  - Stopping straight into BRAKE let the wheel coast: 360° became 434°. HOLD stops at about 369°.
+  - Measured on the VR robot (preliminary; Phase 5 will repeat these):
+    - Motor `spin_for(360)` → 372°.
+    - `drive_for(200 mm)` → 461°/462° of 458° expected.
+    - Open-loop `turn_for(RIGHT, 90)` → 85–87°.
+    - SmartDrive `turn_for(RIGHT, 90)` → 90.1°.
+    - `turn_to_heading(0)` → 0.3°.
+- **`is_done()` grace period.** The wheel's `state` only updates on the next physics frame, so `is_done()` counts a motor as busy for 60 ms after a position command.
+- **SmartDrive turns with `wait=False` raise `SimNotAvailable`.** The closed loop needs the caller's thread.
+- **`brain.screen.print` writes immediately with `end=''`,** and `next_row()` writes the newline. Gears' console appends raw text, so nothing is lost if a program never calls `next_row()`.
+- **`Distance.is_object_detected()`** is `object_distance < 2000 mm`, the documented V5 range. With nothing in the beam, `object_distance` passes through the sim's ray length (3000 mm). The V5 docs don't say what a real sensor returns then.
+- **Skulpt 0.11 quirks hit while building:**
+  - A nested function with `*args, **kwargs` can't see its enclosing scope ("Undefined variable"); unsupported methods use a callable object instead.
+  - Lambdas in a module-level tuple hit the same error.
+  - `dir()` without arguments isn't supported.
+
+### V5 doc discrepancies (api.vex.com, read 2026-10-04)
+
+- **Gear ratio names.** The Motor constructor page lists `GearSetting.RATIO_1_1` (default), `RATIO_2_1` and `RATIO_3_1`, but the Drivetrain page's examples use `GearSetting.RATIO_18_1`. The shim follows the Drivetrain page and real VEXcode: `RATIO_36_1`, `RATIO_18_1` (default) and `RATIO_6_1`.
+- **Velocity units default to RPM, not PERCENT.** In `spin`, `spin_for`, `set_velocity`, `drive*`, `turn*` and `set_*_velocity`, a bare `set_velocity(50)` means 50 rpm, which is 300°/s in the sim. The starting velocity is still 50%.
+- **Rotation unit names.** The docs write `RotationUnits.TURNS`; the VEXcode stub has `RotationUnits.REV`. The shim provides both, as the same object.
+- **`brain.screen.print` separators differ.** Its `sep` defaults to `""`, while `print_at` and Controller `print` default to `" "`.
+- **`drive_for` and `spin_for` return values aren't documented.** The shim returns `True` when the move completed and `False` on timeout or `wait=False`.

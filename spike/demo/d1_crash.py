@@ -1,3 +1,5 @@
+# Castle Crasher: drive into the center castle and knock it down.
+# World: spike/castle-crasher-world.json. Robot: spike/vr-robot.json.
 #region VEXcode Generated Robot Configuration
 from vex import *
 
@@ -26,5 +28,6 @@ calibrate_drivetrain()
 
 # Your code here
 drivetrain.set_drive_velocity(50, PERCENT)
-drivetrain.set_turn_velocity(50, PERCENT)
 drivetrain.drive_for(FORWARD, 800, MM, 50, PERCENT)
+brain.screen.print("Crashed!")
+brain.screen.next_row()

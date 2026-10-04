@@ -22,7 +22,7 @@
   "wheelFriction": 10,
   "bodyFriction": 0,
   "casterFriction": 0,
-  "wheelMaxAcceleration": 20,
+  "wheelMaxAcceleration": 2,
   "wheelStopActionHoldForce": 30000,
   "wheelTireDownwardsForce": -4000,
   "color": "#D0D0D0",

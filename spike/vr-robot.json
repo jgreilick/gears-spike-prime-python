@@ -28,7 +28,7 @@
   "bodyFriction": 0,
   "casterFriction": 0,
 
-  "wheelMaxAcceleration": 20,
+  "wheelMaxAcceleration": 2,
   "wheelStopActionHoldForce": 30000,
   "wheelTireDownwardsForce": -4000,
 

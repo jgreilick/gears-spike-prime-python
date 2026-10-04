@@ -1,3 +1,5 @@
+# Draw a blue square with the pen (simulator only: vexsim).
+# World: spike/castle-crasher-world.json. Robot: spike/vr-robot.json.
 #region VEXcode Generated Robot Configuration
 from vex import *
 
@@ -25,6 +27,13 @@ calibrate_drivetrain()
 #endregion VEXcode Generated Robot Configuration
 
 # Your code here
-drivetrain.set_drive_velocity(50, PERCENT)
-drivetrain.set_turn_velocity(50, PERCENT)
-drivetrain.drive_for(FORWARD, 800, MM, 50, PERCENT)
+from vexsim import *
+
+pen = Pen()
+pen.set_pen_color(BLUE)
+pen.set_pen_width(MEDIUM)
+pen.move(DOWN)
+for side in range(4):
+    drivetrain.drive_for(FORWARD, 300, MM, 50, PERCENT)
+    drivetrain.turn_for(RIGHT, 90, DEGREES, 50, PERCENT)
+pen.move(UP)

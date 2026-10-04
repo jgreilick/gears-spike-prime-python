@@ -10,21 +10,15 @@ drivetrain = SmartDrive(left_drive_smart, right_drive_smart, drivetrain_inertial
 distance = Distance(Ports.PORT4)
 left_bumper = Bumper(brain.three_wire_port.a)
 right_bumper = Bumper(brain.three_wire_port.b)
-
-
-def calibrate_drivetrain():
-    wait(200, MSEC)
-    brain.screen.print("Calibrating")
-    brain.screen.next_row()
-    drivetrain_inertial.calibrate()
-    while drivetrain_inertial.is_calibrating():
-        wait(25, MSEC)
-    brain.screen.clear_screen()
-
-calibrate_drivetrain()
 #endregion VEXcode Generated Robot Configuration
 
-# Your code here
-drivetrain.set_drive_velocity(50, PERCENT)
-drivetrain.set_turn_velocity(50, PERCENT)
+from vex import SimNotAvailable
+from vextest import *
+
+# One trial: drive_for 800 mm at 50%. Prints distance and lateral error from GPS. World: test world.
+p0 = pos_mm()
 drivetrain.drive_for(FORWARD, 800, MM, 50, PERCENT)
+wait(500, MSEC)
+p1 = pos_mm()
+print('MEASURE drive_800_error_mm %.1f' % (p1[1] - p0[1] - 800))
+print('MEASURE drive_800_lateral_mm %.1f' % (p1[0] - p0[0]))

@@ -1,3 +1,5 @@
+# Drive a 300 mm square twice: open-loop (no sensor), then SmartDrive (inertial).
+# World: spike/castle-crasher-world.json. Robot: spike/vr-robot.json.
 #region VEXcode Generated Robot Configuration
 from vex import *
 
@@ -25,6 +27,26 @@ calibrate_drivetrain()
 #endregion VEXcode Generated Robot Configuration
 
 # Your code here
-drivetrain.set_drive_velocity(50, PERCENT)
-drivetrain.set_turn_velocity(50, PERCENT)
-drivetrain.drive_for(FORWARD, 800, MM, 50, PERCENT)
+open_loop = DriveTrain(left_drive_smart, right_drive_smart, 157.08, 120, 50.8, MM, 1)
+
+
+def square(dt):
+    for side in range(4):
+        dt.drive_for(FORWARD, 300, MM, 50, PERCENT)
+        dt.turn_for(RIGHT, 90, DEGREES, 50, PERCENT)
+    wait(500, MSEC)
+
+
+def heading_error():
+    return (drivetrain_inertial.heading(DEGREES) + 180) % 360 - 180
+
+
+drivetrain_inertial.set_heading(0, DEGREES)
+square(open_loop)
+brain.screen.print("Open-loop square, heading error: ", heading_error(), " deg")
+brain.screen.next_row()
+
+drivetrain_inertial.set_heading(0, DEGREES)
+square(drivetrain)
+brain.screen.print("SmartDrive square, heading error: ", heading_error(), " deg")
+brain.screen.next_row()

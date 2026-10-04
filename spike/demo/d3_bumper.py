@@ -1,3 +1,5 @@
+# Bump and turn: drive until a bumper hits, back up 200 mm, turn right, repeat for 20 s.
+# World: spike/vr-test-world.json (walled arena). Robot: spike/vr-robot.json.
 #region VEXcode Generated Robot Configuration
 from vex import *
 
@@ -25,6 +27,17 @@ calibrate_drivetrain()
 #endregion VEXcode Generated Robot Configuration
 
 # Your code here
-drivetrain.set_drive_velocity(50, PERCENT)
-drivetrain.set_turn_velocity(50, PERCENT)
-drivetrain.drive_for(FORWARD, 800, MM, 50, PERCENT)
+bumps = 0
+brain.timer.clear()
+while brain.timer.time(SECONDS) < 20:
+    drivetrain.drive(FORWARD, 40, PERCENT)
+    if left_bumper.pressing() or right_bumper.pressing():
+        bumps = bumps + 1
+        brain.screen.print("Bump ", bumps)
+        brain.screen.next_row()
+        drivetrain.drive_for(REVERSE, 200, MM, 40, PERCENT)
+        drivetrain.turn_for(RIGHT, 90, DEGREES, 30, PERCENT)
+    wait(20, MSEC)
+drivetrain.stop()
+brain.screen.print("Done after ", bumps, " bumps")
+brain.screen.next_row()

@@ -9,6 +9,8 @@ _POLL = 0.01
 _START_GRACE = 0.06
 _SETTLE_MAX = 0.3
 _SETTLE_DPS = 5.0
+_APPROACH_DECEL = 2000.0
+_APPROACH_MIN_DPS = 60.0
 _SIM_MAX_DPS = 800.0
 
 __all__ = [
@@ -167,6 +169,10 @@ _THREE_WIRE = {'a': ('Bumper', 'in3'), 'b': ('Bumper', 'in4')}
 _MIRRORED = ('outB',)
 
 
+def _a(noun):
+    return ('an ' if noun[0] in 'AEIOU' else 'a ') + noun
+
+
 def _gears_port(port, kind):
     if isinstance(port, _TriPort):
         table, key, label = _THREE_WIRE, port.letter, '3-wire port ' + port.letter.upper()
@@ -178,8 +184,7 @@ def _gears_port(port, kind):
         raise SimNotAvailable('Nothing is plugged into %s on the sim robot.' % label)
     found, gears = table[key]
     if found != kind:
-        article = 'an' if found[0] in 'AEIOU' else 'a'
-        raise SimNotAvailable('%s on the sim robot is %s %s, not a %s.' % (label, article, found, kind))
+        raise SimNotAvailable('%s on the sim robot is %s, not %s.' % (label, _a(found), _a(kind)))
     return gears
 
 
@@ -370,6 +375,7 @@ class _Spinner(object):
             if self._timeout and time.time() - t0 > self._timeout:
                 self._halt(self._stopping)
                 return False
+            self._approach()
             time.sleep(_POLL)
         _settle([self])
         self._halt(self._stopping)
@@ -380,7 +386,7 @@ class _Spinner(object):
 
     def spin_for(self, direction, angle, units=DEGREES, velocity=None, units_v=RPM, wait=True):
         dps = self._resolve(velocity, units_v)
-        sign = _dir_sign(direction, FORWARD, REVERSE) * (1 if dps >= 0 else -1)
+        sign = _dir_sign(direction, FORWARD, REVERSE)
         self._run_relative(sign * _degrees(angle, units), dps)
         if wait:
             return self._await()
@@ -437,6 +443,8 @@ class Motor(_Spinner):
         self._setup()
         self._offset = 0.0
         self._started = 0.0
+        self._target = None
+        self._top = 0.0
         self._m.stop_action('brake')
         self._m.command('stop')
 
@@ -458,16 +466,27 @@ class Motor(_Spinner):
         return abs(self._m.speed()) > _SETTLE_DPS
 
     def _run_forever(self, dps):
+        self._target = None
         self._m.speed_sp(dps * self._sign())
         self._m.command('run-forever')
         self._started = 0.0
 
     def _run_relative(self, degrees, dps):
+        raw = degrees * self._sign()
+        self._target = self._m.position() + raw
+        self._top = abs(dps)
         self._m.stop_action('hold')
-        self._m.speed_sp(abs(dps))
-        self._m.position_sp(degrees * self._sign())
+        self._m.speed_sp(self._top)
+        self._m.position_sp(raw)
         self._m.command('run-to-rel-pos')
         self._started = time.time()
+
+    def _approach(self):
+        if self._target is None:
+            return
+        remaining = abs(self._target - self._m.position())
+        dps = math.sqrt(2.0 * _APPROACH_DECEL * remaining)
+        self._m.speed_sp(min(self._top, max(_APPROACH_MIN_DPS, dps)))
 
     def _halt(self, mode):
         self._m.stop_action(_stop_action(mode))
@@ -518,6 +537,10 @@ class MotorGroup(_Spinner):
             if m._moving():
                 return True
         return False
+
+    def _approach(self):
+        for m in self._motors:
+            m._approach()
 
     def _run_forever(self, dps):
         for m in self._motors:
@@ -585,6 +608,8 @@ class DriveTrain(object):
             if self._timeout and time.time() - t0 > self._timeout:
                 self.stop()
                 return False
+            self._lm._approach()
+            self._rm._approach()
             time.sleep(_POLL)
         _settle([self._lm, self._rm])
         self.stop()
@@ -604,7 +629,7 @@ class DriveTrain(object):
 
     def drive_for(self, direction, distance, units=INCHES, velocity=None, units_v=RPM, wait=True):
         dps = self._speed(velocity, units_v, self._drive_velocity)
-        sign = _dir_sign(direction, FORWARD, REVERSE) * (1 if dps >= 0 else -1)
+        sign = _dir_sign(direction, FORWARD, REVERSE)
         deg = sign * self._motor_degrees(_mm(distance, units))
         return self._move(deg, deg, dps, wait)
 
@@ -615,7 +640,7 @@ class DriveTrain(object):
 
     def turn_for(self, direction, angle, units=DEGREES, velocity=None, units_v=RPM, wait=True):
         dps = self._speed(velocity, units_v, self._turn_velocity)
-        sign = _dir_sign(direction, RIGHT, LEFT) * (1 if dps >= 0 else -1)
+        sign = _dir_sign(direction, RIGHT, LEFT)
         arc = math.pi * self._track_width * _degrees(angle, units) / 360.0
         deg = sign * self._motor_degrees(arc)
         return self._move(deg, -deg, dps, wait)
@@ -690,6 +715,9 @@ class SmartDrive(DriveTrain):
             self._lm._run_forever(flip * dps)
             self._rm._run_forever(-flip * dps)
             time.sleep(_POLL)
+        self._lm._halt(HOLD)
+        self._rm._halt(HOLD)
+        _settle([self._lm, self._rm])
         self.stop()
         return done
 
@@ -741,6 +769,7 @@ _mark_unsupported(Bumper, ['pressed', 'released'])
 
 class Distance(object):
     _MAX_MM = 2000.0
+    _NO_OBJECT_MM = 9999.0
 
     def __init__(self, port):
         self._gport = _gears_port(port, 'Distance')
@@ -748,7 +777,8 @@ class Distance(object):
 
     def _mm(self):
         _tick()
-        return self._s.dist() * 10.0
+        mm = self._s.dist() * 10.0
+        return mm if mm <= self._MAX_MM else self._NO_OBJECT_MM
 
     def object_distance(self, units=MM):
         mm = self._mm()
@@ -759,7 +789,7 @@ class Distance(object):
         raise ValueError('Distance units must be MM or INCHES, not %r.' % (units,))
 
     def is_object_detected(self):
-        return self._mm() < self._MAX_MM
+        return self._mm() != self._NO_OBJECT_MM
 
 _mark_unsupported(Distance, ['object_velocity', 'object_size', 'changed', 'installed'])
 

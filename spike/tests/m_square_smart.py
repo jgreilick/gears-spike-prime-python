@@ -10,21 +10,17 @@ drivetrain = SmartDrive(left_drive_smart, right_drive_smart, drivetrain_inertial
 distance = Distance(Ports.PORT4)
 left_bumper = Bumper(brain.three_wire_port.a)
 right_bumper = Bumper(brain.three_wire_port.b)
-
-
-def calibrate_drivetrain():
-    wait(200, MSEC)
-    brain.screen.print("Calibrating")
-    brain.screen.next_row()
-    drivetrain_inertial.calibrate()
-    while drivetrain_inertial.is_calibrating():
-        wait(25, MSEC)
-    brain.screen.clear_screen()
-
-calibrate_drivetrain()
 #endregion VEXcode Generated Robot Configuration
 
-# Your code here
-drivetrain.set_drive_velocity(50, PERCENT)
-drivetrain.set_turn_velocity(50, PERCENT)
-drivetrain.drive_for(FORWARD, 800, MM, 50, PERCENT)
+from vex import SimNotAvailable
+from vextest import *
+
+# One trial: 4 x (drive 300 mm, turn right 90) with SmartDrive. World: test world.
+p0 = pos_mm()
+y0 = yaw()
+for side in range(4):
+    drivetrain.drive_for(FORWARD, 300, MM, 50, PERCENT)
+    drivetrain.turn_for(RIGHT, 90, DEGREES, 50, PERCENT)
+wait(500, MSEC)
+print('MEASURE square_smart_heading_error_deg %.2f' % (yaw() - y0 - 360))
+print('MEASURE square_smart_position_error_mm %.1f' % travelled_mm(p0, pos_mm()))

@@ -1,3 +1,5 @@
+# Drive toward the center castle and stop 150 mm in front of it.
+# World: spike/castle-crasher-world.json. Robot: spike/vr-robot.json.
 #region VEXcode Generated Robot Configuration
 from vex import *
 
@@ -25,6 +27,12 @@ calibrate_drivetrain()
 #endregion VEXcode Generated Robot Configuration
 
 # Your code here
-drivetrain.set_drive_velocity(50, PERCENT)
-drivetrain.set_turn_velocity(50, PERCENT)
-drivetrain.drive_for(FORWARD, 800, MM, 50, PERCENT)
+brain.screen.print("Start: ", distance.object_distance(MM), " mm")
+brain.screen.next_row()
+drivetrain.drive(FORWARD, 30, PERCENT)
+while distance.object_distance(MM) >= 150:
+    wait(20, MSEC)
+drivetrain.stop()
+wait(500, MSEC)
+brain.screen.print("Stopped at: ", distance.object_distance(MM), " mm")
+brain.screen.next_row()

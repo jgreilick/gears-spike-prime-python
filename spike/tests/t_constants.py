@@ -53,5 +53,5 @@ check_eq('all_names_exist', len([n for n in vex.__all__ if hasattr(vex, n)]), le
 check_eq('all_has_no_private', len([n for n in vex.__all__ if n.startswith('_')]), 0)
 check_eq('SimNotAvailable_not_in_all', 'SimNotAvailable' in vex.__all__, False)
 check_eq('simPython_not_in_all', 'simPython' in vex.__all__, False)
-check_eq('version', vex._VERSION, '0.1')
+check_eq('version', vex._VERSION, '0.2')
 summary('t_constants')

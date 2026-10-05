@@ -412,8 +412,8 @@ Load it with World → Load from file, and load `spike/vr-robot.json` as the rob
 
 | File | Purpose |
 |---|---|
-| `spike/vex.py` | V5 Python subset over `simPython`. Prints `vex shim v0.1`. `__all__` keeps internals and `SimNotAvailable` out of `import *` (Skulpt 0.11 honours `__all__`); tests import `SimNotAvailable` explicitly. |
-| `spike/vexsim.py` | VR-style `Pen` (`move`, `set_pen_color`, `set_pen_width`, `set_pen_color_rgb`; `fill` raises). Prints `vexsim v0.1`. |
+| `spike/vex.py` | V5 Python subset over `simPython`. Prints `vex shim v0.2` (v0.1 at tag `vex-shim-v0.1`). `__all__` keeps internals and `SimNotAvailable` out of `import *` (Skulpt 0.11 honours `__all__`); tests import `SimNotAvailable` explicitly. |
+| `spike/vexsim.py` | VR-style `Pen` (`move`, `set_pen_color`, `set_pen_width`, `set_pen_color_rgb`; `fill` raises). Prints `vexsim v0.2`. |
 | `spike/starter/main.py` | VEXcode-style config block, then `set_drive_velocity`/`set_turn_velocity(50, PERCENT)` and `drive_for(FORWARD, 800, MM, 50, PERCENT)`. Every velocity names its units. |
 | `spike/build_starter.py` | Builds `dist/vex-starter.zip` with fixed timestamps: `python spike/build_starter.py`. |
 
@@ -502,6 +502,8 @@ The local copy gave the same centre-castle result (10/10 moved, 2/4 roofs down).
 - **Power-on defaults match the docs.** Motors and drivetrains start at 50% drive and turn velocity, and stopping defaults to BRAKE. The shim already did this.
 
 ## 12. Test suite, demo measurements and demos (2026-10-04, public site)
+
+**Version.** The shim fixes below shipped as v0.2 (tag `vex-shim-v0.2`). That changed only the version strings in `vex.py`, `vexsim.py` and `t_constants`; the results below came from the same code at v0.1.
 
 Everything below ran on **gears.aposteriori.com.sg**, loaded the way a student loads it:
 - **World:** Worlds → Load from file.

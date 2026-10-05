@@ -5,7 +5,7 @@ Mirrors the VEXcode VR pen (api.vex.com/vr/home/python/drawing.html).
 import simPython
 from vex import SimNotAvailable
 
-_VERSION = '0.1'
+_VERSION = '0.2'
 _PEN_PORT = 'in8'
 
 __all__ = ['Pen', 'UP', 'DOWN', 'BLACK', 'RED', 'GREEN', 'BLUE',

@@ -3,7 +3,7 @@ import simPython
 import time
 import math
 
-_VERSION = '0.1'
+_VERSION = '0.2'
 _SENSOR_DELAY = 0.001
 _POLL = 0.01
 _START_GRACE = 0.06

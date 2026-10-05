@@ -17,7 +17,7 @@ FILES = [
     ('main.py', os.path.join(SPIKE, 'starter', 'main.py')),
     ('vex.py', os.path.join(SPIKE, 'vex.py')),
     ('vexsim.py', os.path.join(SPIKE, 'vexsim.py')),
-    ('gearsRobot.json', os.path.join(SPIKE, 'vr-robot.json')),
+    ('gearsRobot.json', os.path.join(SPIKE, 'vr-robot-styled.json')),
     ('castle-crasher.json', os.path.join(SPIKE, 'castle-crasher-world.json')),
 ]
 META = {'name': 'vex-starter', 'pythonModified': True}

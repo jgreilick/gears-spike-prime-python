@@ -449,7 +449,7 @@ Load it with World → Load from file, and load `spike/vr-robot.json` as the rob
 | `meta.json` | `{"name": "vex-starter", "pythonModified": true}` |
 | `main.py` | `spike/starter/main.py` |
 | `vex.py`, `vexsim.py` | `spike/` |
-| `gearsRobot.json` | `spike/vr-robot.json` |
+| `gearsRobot.json` | `spike/vr-robot-styled.json` (since 2026-10-05; earlier ZIPs shipped the plain `vr-robot.json`) |
 | `castle-crasher.json` | `spike/castle-crasher-world.json` |
 
 ### Public-site round trip (2026-10-04, gears.aposteriori.com.sg, built-in browser; v0.1 ZIP, repeated for the current ZIP in §12)
@@ -590,3 +590,23 @@ Each demo is the starter's config block plus an explicit-units body.
 | d5_pen_square | Castle Crasher | One continuous blue trace, a visible square (the corner doesn't quite close) |
 
 **The d4 gap is easy to see.** About 26° against 3° in one run, and about 31° against 2.5° on average in the 5-run measurement, so it needs no variant.
+
+## 13. Starter ZIP shipped the plain robot (fixed 2026-10-05)
+
+**What James saw.** He imported `vex-starter.zip` on the public site by hand. The code tabs loaded and a robot appeared, but without the styling.
+
+**Cause.** `build_starter.py` packed `spike/vr-robot.json` (plain) as `gearsRobot.json`, not `vr-robot-styled.json`. The robot in his screenshot is the plain VR robot (grey body, red bumper pads, green eyes), so Import did load it, just the wrong file. My earlier round trips checked the robot *name* (`vexVRRobot`), and that name is the plain one. Nothing ever checked for styling.
+
+**Ruled out:**
+- **`meta.json`.** It holds only `{name, pythonModified}`. Styling lives entirely in the robot JSON.
+- **The import code path.** `loadZipFromComputer()` reads the picked file with `FileReader`, opens it with JSZip, and calls `main.loadRobot()` if there's an entry named exactly `gearsRobot.json` at the ZIP root. There's no confirm dialog and no reload, and an already-loaded world stays put. The real `<input type=file>` and the harness's injected `File` both reach the same `change` handler with the same bytes.
+- **Re-zipped folders, a remaining caveat.** If someone extracts the ZIP and re-zips the folder, every entry gains a `folder/` prefix. Gears then skips the robot, because it looks for exactly `gearsRobot.json`, while the `.py` files still load as `folder/main.py`. Students should import the original ZIP. The built ZIP has every entry at the root.
+- **External references in the styled JSON.** There are none. Its only image is the body texture, an embedded `data:` URL (74,566 chars). There's no `modelURL` and no paths, hosts or localhost, and it loads from anywhere. The wheel texture is Gears' built-in `textures/robot/wheel.png`, which the public site serves.
+
+**Fix.** `build_starter.py` now packs `vr-robot-styled.json` (`vexVRRobotStyled`, `wheelMaxAcceleration` 2, 21 components). `dist/vex-starter.zip` is now 64,134 bytes, SHA-256 `202eb0ea652ce18c…`.
+
+**Checks on the styled robot (local copy):**
+- Ports are unchanged: in1 gyro, in2 GPS, in3/in4 touch, in5 laser, in6/in7 colour, in8 pen, outC magnet. The decorative Box and Cylinder parts take no ports.
+- t_drive_for 13/13, t_smartdrive_turn 8/8, t_bumper 8/8, t_distance 11/11, t_pen 17/17, t_inertial 16/16.
+- Castle Crasher starter × 3: 10/10 centre pieces moved and 2/4 roofs down every run, with other castles untouched.
+- The public-site check for this fix is James's manual run (steps in the hand-off), not the harness.
